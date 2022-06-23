@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+
+$(()=>
+            {
+            console.log("Page Loaded");
+
+                //On Add CLICLK EVENT
+            $("#btn").click(function () 
+                { 
+
+                    console.log("add event successful");
+
+                    let x = $("#bookid").val();
+                    let y = $("#bookname").val();
+                    let z = $("#price").val();
+
+                    let ajaxparams = {
+                        data:{a:x,b:y,c:z},
+                        type: "get",
+                        dataType: "json",
+                        url: "http://localhost:808/click",
+                    
+                        success: function (data) {
+                            if(data){
+                                $("#msg1").text("Book Added to the List");
+                                //$("#bookname").text(data.bookname);
+                              //  $("#price").val(data.price);
+                            //content from tables
+                            //
+                            //
+                            //
+                            }else{
+                                $("#msg1").text("Book NOT Added to the List");
+                                //content from tables
+                                //
+                                //
+                                //
+                            }
+                           
+
+                        },
+                        error: function (e) {
+                            alert('we have trouble ' + JSON.stringify(e));
+                        },
+                        };
+                        $.ajax(ajaxparams);
+                });
+                
+                
+               
+
+
+               // ON BLUR for after adding a book
+
+                $("#bookid").blur(function () 
+                { 
+                    console.log("Blur event successful");
+
+                    let y = $("#bookid").val();
+                    console.log();
+
+                    let ajaxparams = {
+                        data:{x:y},
+                        type: "get",
+                        dataType: "json",
+                        url: "http://localhost:808/blur",
+                    
+                        success: function (output) {
+                            console.log(output);
+                            let books = "";
+
+                            if(output.bookfoundstatus){
+                                for(let i =0; i< output.allbooks.length; i++){
+                                books +="</br>"+
+                                output.allbooks[i].bookid +" "+output.allbooks[i].bookname+" "+output.allbooks[i].price;
+
+                            }
+                            
+                                //output.bookfoundstatus = false;
+                        }
+                            
+                            if(output.bookfoundstatus){
+                                $("#msg1").text("Book Available in the List");
+                                $("#bookname").val(output.allbooks.bookname);
+                                $("#price").val(output.allbooks.price);
+                                
+                            }else{
+                               
+                                $("#msg1").text("Book NOT Available in the List");
+                                $("#bookname").val(" ");
+                                $("#price").val(" ");
+                            }
+                        
+                $("#msg").html(books);
+                           
+
+                        },
+                        error: function (e) {
+                            alert('we have trouble ' + JSON.stringify(e));
+                        },
+                        };
+                        $.ajax(ajaxparams);
+                });
+
+
+                ////
+                $("#btn").click(function () 
+                { 
+                    console.log("Blur event successful");
+
+                    let y = $("#bookid").val();
+                    console.log(y);
+
+                    let ajaxparams = {
+                        data:{x:y},
+                        type: "get",
+                        dataType: "json",
+                        url: "http://localhost:808/blur2",
+                    
+                        success: function (output) {
+                            console.log(output);
+                            let books = "";
+                            for(let i =0; i< output.allbooks.length; i++){
+                                books +="</br>"+
+                                output.allbooks[i].bookid +" "+output.allbooks[i].bookname+" "+output.allbooks[i].price;
+                            
+                            // if(output.allbooks[i].bookid == y){
+                            //     $("#msg1").text("Book Available in the List");
+                            // }else{
+                            //     $("#msg1").text("Book NOT Available in the List");
+                            // }
+                        }
+                $("#msg").html(books);
+                           
+
+                        },
+                        error: function (e) {
+                            alert('we have trouble ' + JSON.stringify(e));
+                        },
+                        };
+                        $.ajax(ajaxparams);
+                });
+                
+                
+                
+             
+ });
+
+
+
+    </script>
+</head>
+<body>
+    <span>Book id</span>
+    <input type="text" id="bookid" placeholder="Enter Book ID" >
+    <span id="msg1">what happened</span><br>
+    <span>Book Name</span>
+    <input type="text" id="bookname" placeholder="Enter Book Name"><br>
+    <span>Price</span>
+    <input type="text" id="price" placeholder="Enter Price"><br><br>
+    <button id="btn"> Add a Book</button><br>
+    <hr>
+    <span id="msg">Show All Books</span>
+
+</body>
+</html>
